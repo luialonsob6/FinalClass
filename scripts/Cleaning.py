@@ -23,15 +23,17 @@ class Cleaning:
         return count
     
     def erase_columns(self, column):
-        count = count_NaN(self,column)
+        count = self.count_NaN(self,column)
         if count > 1000:
             del self.df[column]
         else:
             pass
+        return self.df
 
     def cleaning_columns(self):
         for column in self.df.columns:
-            erase_columns(self,column)
+            self.erase_columns(self,column)
+        
 
 
 
