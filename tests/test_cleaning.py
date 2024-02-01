@@ -1,38 +1,56 @@
 """
-Tests for the cleaning script
+Functions to test the cleaning scripts
 """
 import unittest
 import pandas as pd
-from Cleaning import Cleaning
+from cleaning import Cleaningclass
 
-class TestCleaning(unittest.TestCase):
+
+class TestCleaningMethods(unittest.TestCase):
+    """
+    Clase para testear las funciones de cleaning
+    """
+
     def setUp(self):
+        """
+        Creamos un dataframe nuevo para hacer los tests
+        """
         data = {
-            "col1": [1, 2, 3, 4, 5],
-            "col2": [6, 7, pd.NA, 9, 10],  
-            "col3": ["A", "B", "C", "D", "E"]
+            "A": [1, 2, 3, 3, 4],
+            "B": [5, 6, pd.NA, 8, pd.NA],
+            "C": [pd.NA, 7, pd.NA, pd.NA, 9],
         }
         self.df = pd.DataFrame(data)
+        self.cleaning = Cleaningclass(self.df.copy())
 
     def test_erase_duplicates(self):
-        cleaning_obj = Cleaning(self.df)
-        cleaned_df = cleaning_obj.erase_duplicates()
-        self.assertEqual(len(cleaned_df), len(self.df.drop_duplicates()))  
+        """
+        Test función duplicados
+        """
+        cleaned_df = self.cleaning.erase_duplicates()
+        self.assertEqual(len(cleaned_df), len(self.df.drop_duplicates()))
 
-    def test_count_NaN(self):
-        cleaning_obj = Cleaning(self.df)
-        nan_count = cleaning_obj.count_NaN("col2")
-        self.assertEqual(nan_count, 1)  
+    def test_count_null(self):
+        """
+        Test función nulos
+        """
+        nan_count = self.cleaning.count_null("B")
+        self.assertEqual(nan_count, 2)
 
     def test_erase_columns(self):
-        cleaning_obj = Cleaning(self.df)
-        cleaning_obj.erase_columns("col2")
-        self.assertNotIn("col2", cleaning_obj.df.columns) 
+        """
+        Test función borrar columnas
+        """
+        cleaned_df = self.cleaning.erase_columns("B")
+        self.assertNotIn("B", cleaned_df.columns)
 
     def test_cleaning_columns(self):
-        cleaning_obj = Cleaning(self.df)
-        cleaning_obj.cleaning_columns()
-        self.assertNotIn("col2", cleaning_obj.df.columns)  
-        
+        """
+        Test función limpiar todas las columnas
+        """
+        cleaned_df = self.cleaning.cleaning_columns()
+        self.assertNotIn("B", cleaned_df.columns)
+
+
 if __name__ == "__main__":
     unittest.main()
