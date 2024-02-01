@@ -3,108 +3,95 @@ Script to analyze the datframe
 """
 import unittest
 import pandas as pd
+import click
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-df = "Airbnb_NYC.csv"
 
 class DataAnalyzer:
+    """
+    Clase con las funciones para realizar el data analysis
+    """
     def __init__(self, df):
         self.df = df
 
-    def summary_statistics(self):
+    def describe_df(self):
         """
-        Generate summary statistics for numerical columns
+        A summary of the numeric columns
         """
         return self.df.describe()
 
-    def unique_values(self):
+    def value_counting(self, column):
         """
         Get unique values for each column
         """
-        unique_vals = {}
-        for col in self.df.columns:
-            unique_vals[col] = self.df[col].unique()
-        return unique_vals
 
-    def missing_values(self):
+        return self.df[column].value_counts()
+
+    def hist_column(self, column):
         """
-        Count missing values in each column
+        Plot a histogram of a certain column
         """
-        return self.df.isnull().sum()
+        self.df[column].hist()
+        return plt.show()
+
+    def boxplot_column(self, column):
+        """
+        Plot a boxplot of a certain column
+        """
+        sns.boxplot(x=column, data=self.df)
+        return plt.show()
 
     def correlation_matrix(self):
         """
-        Calculate the correlation matrix for numerical columns
+        The correlation between
         """
         return self.df.corr()
 
+    def mean_price_neighbourhood(self):
+        """
+        Muestra cual es el precio medio por barrio
+        """
+        precio_barrio = self.df.groupby("neighbourhood_group")["price"].mean()
+
+        precio_barrio.plot(kind="bar")
+        plt.xlabel("Barrio")
+        plt.ylabel("Precio medio")
+        plt.title("Precio medio por barrio")
+
+        return plt.show()
 
 
+@click.command(short_help="parser to import dataset")
+@click.option("-i", "--insert", required=True, help="Path to my Input Dataset")
+@click.option("-c", "--column", required=True, help="Column value counts")
+def main(insert, column):
+    """
+    Data analysis functions
+    """
+    df = pd.read_csv(insert)
 
-summary_stats = df.summary_statistics()
-print("Summary Statistics:")
-print(summary_stats)
+    print("Describe:")
+    print(df.describe_df())
 
+    print("\nValue Counts:")
+    print(df.value_counting(column))
 
-unique_vals = df.unique_values()
-print("\nUnique Values:")
-print(unique_vals)
+    print("\nMHistogram:")
+    print(df.hist_column(column))
 
+    print("\nBoxplot:")
+    print(df.boxplot_column(column))
 
-missing_vals = df.missing_values()
-print("\nMissing Values:")
-print(missing_vals)
+    print("\nCorrelation Matrix:")
+    print(df.correlation_matrix())
 
-
-correlation_matrix = df.correlation_matrix()
-print("\nCorrelation Matrix:")
-print(correlation_matrix)
-        
+    print("\nMean price:")
+    print(df.mean_price_neighbourhood())
 
 
 if __name__ == "__main__":
     unittest.main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 if __name__ == "__main__":
