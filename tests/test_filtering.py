@@ -1,43 +1,72 @@
 """
-Tests for the filtering script
+Test for filtering fucntions
 """
 import unittest
 import pandas as pd
-from Filtering import Filterdata
+from filtering import Filterdata
 
-class TestFilterData(unittest.TestCase):
+
+class TestFilterdataMethods(unittest.TestCase):
+    """
+    Clase para testear las funciones de filering
+    """
+
     def setUp(self):
+        """
+        Creamos un dataframe nuevo para hacer los tests
+        """
         data = {
-            "neighbourhood_group": ["A", "B", "A", "C", "B"],
-            "Year": ["type1", "type2", "type1", "type1", "type2"],
-            "price": [100, 200, 150, 180, 220],
-            "minimum_nights": [2, 3, 1, 2, 4],
-            "availability_365": [100, 200, 150, 180, 220]
+            "neighbourhood_group": ["A", "B", "A", "B", "A"],
+            "room_type": [
+                "Entire home/apt",
+                "Private room",
+                "Entire home/apt",
+                "Private room",
+                "Entire home/apt",
+            ],
+            "price": [100, 200, 150, 250, 180],
+            "minimum_nights": [1, 2, 3, 4, 5],
+            "availability_365": [100, 200, 300, 400, 500],
         }
         self.df = pd.DataFrame(data)
+        self.filter = Filterdata(self.df.copy())
 
     def test_filter_neighbourhood(self):
-        filter_obj = Filterdata(self.df)
-        filtered_df = filter_obj.filter_neighbourhood("A")
-        self.assertEqual(filtered_df.shape[0], 2)  
+        """
+        Test para la función de barrio
+        """
+        filtered_df = self.filter.filter_neighbourhood("A")
+        self.assertEqual(len(filtered_df), 3)
+
     def test_filter_type(self):
-        filter_obj = Filterdata(self.df)
-        filtered_df = filter_obj.filter_type("type1")
-        self.assertEqual(filtered_df.shape[0], 3)  
+        """
+        Test para la función de tipo habitación
+        """
+        filtered_df = self.filter.filter_type("Private room")
+        self.assertEqual(
+            len(filtered_df), 2)
 
     def test_filter_higher_mean(self):
-        filter_obj = Filterdata(self.df)
-        filtered_df = filter_obj.filter_higher_mean()
-        self.assertEqual(filtered_df.shape[0], 2)  
+        """
+        Test para la función de precio
+        """
+        filtered_df = self.filter.filter_higher_mean()
+        self.assertEqual(len(filtered_df), 3)
 
     def test_filter_min_nights(self):
-        filter_obj = Filterdata(self.df)
-        filtered_df = filter_obj.filter_min_nights(3)
-        self.assertEqual(filtered_df.shape[0], 2)  
+        """
+        Test para la función de noches minimas
+        """
+        filtered_df = self.filter.filter_min_nights(3)
+        self.assertEqual(len(filtered_df), 3)
+
     def test_filter_availability(self):
-        filter_obj = Filterdata(self.df)
-        filtered_df = filter_obj.filter_availability(150)
-        self.assertEqual(filtered_df.shape[0], 3)  
+        """
+        Test para la función de disponibilidad
+        """
+        filtered_df = self.filter.filter_availability(300)
+        self.assertEqual(len(filtered_df), 3) 
+
 
 if __name__ == "__main__":
     unittest.main()
