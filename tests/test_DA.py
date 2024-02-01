@@ -1,35 +1,70 @@
+"""
+Functions to test the data analysis script
+"""
 import unittest
 import pandas as pd
-from Data_analysis import DataAnalyzer
+import matplotlib.pyplot as plt
+from data_analysis import DataAnalyzer
+
 
 class TestDataAnalyzer(unittest.TestCase):
+    """
+    Clase para testear las funciones de data analysis
+    """
     def setUp(self):
-        self.df = pd.read_csv("Airbnb_NYC.csv")
+        """
+        Creamos un dataframe nuevo para hacer los tests
+        """
+        data = {
+            "columna1": [1, 2, 3, 4, 5],
+            "columna2": [5, 6, 7, 8, 9],
+            "neighbourhood_group": ["A", "B", "A", "B", "A"],
+            "price": [100, 200, 150, 250, 180],
+        }
+        self.df = pd.DataFrame(data)
+        self.analyzer = DataAnalyzer(self.df.copy())
 
-    def test_summary_statistics(self):
-        analyzer = DataAnalyzer(self.df)
-        summary_stats = analyzer.summary_statistics()
-        self.assertIsInstance(summary_stats, pd.DataFrame)
-        self.assertEqual(len(summary_stats), len(self.df.describe()))
+    def test_describe_df(self):
+        """
+        Test para la función describe
+        """
+        description = self.analyzer.describe_df()
+        self.assertEqual(description.shape, (8, 4))
 
-    def test_unique_values(self):
-        analyzer = DataAnalyzer(self.df)
-        unique_vals = analyzer.unique_values()
-        self.assertIsInstance(unique_vals, dict)
-        self.assertEqual(len(unique_vals), len(self.df.columns))
+    def test_value_counting(self):
+        """
+        Test para la función de contar valores
+        """
+        value_counts = self.analyzer.value_counting("neighbourhood_group")
+        self.assertEqual(value_counts["A"], 3)
 
-    def test_missing_values(self):
-        analyzer = DataAnalyzer(self.df)
-        missing_vals = analyzer.missing_values()
-        self.assertIsInstance(missing_vals, pd.Series)
-        self.assertEqual(len(missing_vals), len(self.df.columns))
+    def test_hist_column(self):
+        """
+        Test para la función de crear un histograma
+        """
+        hist_plot = self.analyzer.hist_column("price")
+        self.assertIsInstance(hist_plot, type(plt))
+
+    def test_boxplot_column(self):
+        """
+        Test para la función de crear un boxplot
+        """
+        boxplot_plot = self.analyzer.boxplot_column("price")
+        self.assertIsInstance(boxplot_plot, type(plt))
 
     def test_correlation_matrix(self):
-        analyzer = DataAnalyzer(self.df)
-        correlation_matrix = analyzer.correlation_matrix()
-        self.assertIsInstance(correlation_matrix, pd.DataFrame)
-        self.assertEqual(correlation_matrix.shape[0], correlation_matrix.shape[1])
-        self.assertEqual(len(correlation_matrix.columns), len(self.df.select_dtypes(include='number').columns))
+        """
+        Test para la función de crear una matriz de correlación
+        """
+        correlation_matrix = self.analyzer.correlation_matrix()
+        self.assertEqual(correlation_matrix.shape, (4, 4))  
+
+    def test_mean_price_neighbourhood(self):
+        """
+        Test para la funcion de precio medio
+        """
+        mean_price_plot = self.analyzer.mean_price_neighbourhood()
+        self.assertIsInstance(mean_price_plot, type(plt))  
 
 if __name__ == "__main__":
     unittest.main()
