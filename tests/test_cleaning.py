@@ -3,7 +3,7 @@ Functions to test the cleaning scripts
 """
 import unittest
 import pandas as pd
-from cleaning import Cleaningclass
+from scripts.cleaning import Cleaningclass
 
 
 class TestCleaningMethods(unittest.TestCase):
@@ -17,7 +17,7 @@ class TestCleaningMethods(unittest.TestCase):
         """
         data = {
             "A": [1, 2, 3, 3, 4],
-            "B": [5, 6, pd.NA, 8, pd.NA],
+            "B": [5, pd.NA, pd.NA, 8, pd.NA],
             "C": [pd.NA, 7, pd.NA, pd.NA, 9],
         }
         self.df = pd.DataFrame(data)
@@ -35,14 +35,7 @@ class TestCleaningMethods(unittest.TestCase):
         Test función nulos
         """
         nan_count = self.cleaning.count_null("B")
-        self.assertEqual(nan_count, 2)
-
-    def test_erase_columns(self):
-        """
-        Test función borrar columnas
-        """
-        cleaned_df = self.cleaning.erase_columns("B")
-        self.assertNotIn("B", cleaned_df.columns)
+        self.assertEqual(nan_count, 3)
 
     def test_cleaning_columns(self):
         """

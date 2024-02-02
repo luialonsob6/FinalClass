@@ -7,7 +7,6 @@ import pandas as pd
 import click
 
 
-
 class Filterdata:
     """
     Define class with filter functions
@@ -26,7 +25,7 @@ class Filterdata:
         """
         Filter by room type
         """
-        return self.df[self.df["Year"] == room]
+        return self.df[self.df["room_type"] == room]
 
     def filter_higher_mean(self):
         """
@@ -50,7 +49,9 @@ class Filterdata:
 
 @click.command(short_help="parser to import dataset")
 @click.option("-i", "--insert", required=True, help="Path to my Input Dataset")
-@click.option("-o", "--output", required=True, help="Where to store the filtered dataset")
+@click.option(
+    "-o", "--output", required=True, help="Where to store the filtered dataset"
+)
 @click.option("-f", "--filtering", is_flag=True, help="Set a filtering or not")
 @click.option("-n", "--neighbourhood", required=True, help="Neighbour filter")
 @click.option("-r", "--room", required=True, help="Room type to filter")

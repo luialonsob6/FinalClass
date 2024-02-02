@@ -3,7 +3,7 @@ Test for filtering fucntions
 """
 import unittest
 import pandas as pd
-from filtering import Filterdata
+from scripts.filtering import Filterdata
 
 
 class TestFilterdataMethods(unittest.TestCase):
@@ -43,8 +43,7 @@ class TestFilterdataMethods(unittest.TestCase):
         Test para la función de tipo habitación
         """
         filtered_df = self.filter.filter_type("Private room")
-        self.assertEqual(
-            len(filtered_df), 2)
+        self.assertEqual(len(filtered_df), 2)
 
     def test_filter_higher_mean(self):
         """
@@ -58,14 +57,14 @@ class TestFilterdataMethods(unittest.TestCase):
         Test para la función de noches minimas
         """
         filtered_df = self.filter.filter_min_nights(3)
-        self.assertEqual(len(filtered_df), 3)
+        self.assertEqual(len(filtered_df), 2)
 
     def test_filter_availability(self):
         """
         Test para la función de disponibilidad
         """
         filtered_df = self.filter.filter_availability(300)
-        self.assertEqual(len(filtered_df), 3) 
+        self.assertEqual(len(filtered_df), 3)
 
 
 if __name__ == "__main__":

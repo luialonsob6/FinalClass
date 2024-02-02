@@ -7,7 +7,6 @@ import pandas as pd
 import click
 
 
-
 class Cleaningclass:
     """
     Class with functions to clean the dataset
@@ -38,7 +37,7 @@ class Cleaningclass:
         Borrar aquellas columnas que tengan mas de 1000 valores nulos
         """
         count = self.count_null(column)
-        if count > 1000:
+        if count > (len(self.df) * 0.3):
             del self.df[column]
         else:
             pass

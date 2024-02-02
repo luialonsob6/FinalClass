@@ -12,6 +12,7 @@ class DataAnalyzer:
     """
     Clase con las funciones para realizar el data analysis
     """
+
     def __init__(self, df):
         self.df = df
 
@@ -33,20 +34,24 @@ class DataAnalyzer:
         Plot a histogram of a certain column
         """
         self.df[column].hist()
-        return plt.show()
+        return plt.gcf()
 
     def boxplot_column(self, column):
         """
         Plot a boxplot of a certain column
         """
         sns.boxplot(x=column, data=self.df)
-        return plt.show()
+        return plt.gcf()
 
     def correlation_matrix(self):
         """
         The correlation between
         """
-        return self.df.corr()
+        numeric_columns = self.df.select_dtypes(include=["int", "float"])
+        correlation_matrix = numeric_columns.corr()
+        fig = plt.figure()
+        sns.heatmap(correlation_matrix, annot=True, cmap="coolwarm")
+        return fig
 
     def mean_price_neighbourhood(self):
         """
@@ -59,7 +64,7 @@ class DataAnalyzer:
         plt.ylabel("Precio medio")
         plt.title("Precio medio por barrio")
 
-        return plt.show()
+        return plt.gcf()
 
 
 @click.command(short_help="parser to import dataset")

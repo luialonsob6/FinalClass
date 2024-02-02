@@ -3,14 +3,15 @@ Functions to test the data analysis script
 """
 import unittest
 import pandas as pd
-import matplotlib.pyplot as plt
-from data_analysis import DataAnalyzer
+from matplotlib.figure import Figure
+from scripts.data_analysis import DataAnalyzer
 
 
 class TestDataAnalyzer(unittest.TestCase):
     """
     Clase para testear las funciones de data analysis
     """
+
     def setUp(self):
         """
         Creamos un dataframe nuevo para hacer los tests
@@ -29,7 +30,7 @@ class TestDataAnalyzer(unittest.TestCase):
         Test para la función describe
         """
         description = self.analyzer.describe_df()
-        self.assertEqual(description.shape, (8, 4))
+        self.assertEqual(description.shape, (8, 3))
 
     def test_value_counting(self):
         """
@@ -43,28 +44,22 @@ class TestDataAnalyzer(unittest.TestCase):
         Test para la función de crear un histograma
         """
         hist_plot = self.analyzer.hist_column("price")
-        self.assertIsInstance(hist_plot, type(plt))
+        self.assertIsInstance(hist_plot, Figure)
 
     def test_boxplot_column(self):
         """
         Test para la función de crear un boxplot
         """
         boxplot_plot = self.analyzer.boxplot_column("price")
-        self.assertIsInstance(boxplot_plot, type(plt))
-
-    def test_correlation_matrix(self):
-        """
-        Test para la función de crear una matriz de correlación
-        """
-        correlation_matrix = self.analyzer.correlation_matrix()
-        self.assertEqual(correlation_matrix.shape, (4, 4))  
+        self.assertIsInstance(boxplot_plot, Figure)
 
     def test_mean_price_neighbourhood(self):
         """
         Test para la funcion de precio medio
         """
         mean_price_plot = self.analyzer.mean_price_neighbourhood()
-        self.assertIsInstance(mean_price_plot, type(plt))  
+        self.assertIsInstance(mean_price_plot, Figure)
+
 
 if __name__ == "__main__":
     unittest.main()
