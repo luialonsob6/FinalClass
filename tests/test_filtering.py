@@ -45,12 +45,12 @@ class TestFilterdataMethods(unittest.TestCase):
         filtered_df = self.filter.filter_type("Private room")
         self.assertEqual(len(filtered_df), 2)
 
-    def test_filter_higher_mean(self):
+    def test_filter_price(self):
         """
         Test para la función de precio
         """
-        filtered_df = self.filter.filter_higher_mean()
-        self.assertEqual(len(filtered_df), 3)
+        filtered_df = self.filter.filter_price(250)
+        self.assertEqual(len(filtered_df), 4)
 
     def test_filter_min_nights(self):
         """
