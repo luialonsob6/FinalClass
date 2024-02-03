@@ -27,12 +27,11 @@ class Filterdata:
         """
         return self.df[self.df["room_type"] == room]
 
-    def filter_higher_mean(self):
+    def filter_price(self, price):
         """
         Filter by higher revenue than mean
         """
-        mean = self.df["price"].mean()
-        return self.df[self.df["price"] > mean]
+        return self.df[self.df["price"] < price]
 
     def filter_min_nights(self, nights):
         """
@@ -49,15 +48,14 @@ class Filterdata:
 
 @click.command(short_help="parser to import dataset")
 @click.option("-i", "--insert", required=True, help="Path to my Input Dataset")
-@click.option(
-    "-o", "--output", required=True, help="Where to store the filtered dataset"
-)
+@click.option("-o", "--output", required=True, help="Where to store the filtered dataset")
 @click.option("-f", "--filtering", is_flag=True, help="Set a filtering or not")
 @click.option("-n", "--neighbourhood", required=True, help="Neighbour filter")
+@click.option("-p", "--price", required=True, help="Price filter")
 @click.option("-r", "--room", required=True, help="Room type to filter")
 @click.option("-ni", "--nights", required=True, help="Minimum nights")
 @click.option("-a", "--availability", required=True, help="Available filter")
-def main(insert, output, filtering, room, neighbourhood, nights, availability):
+def main(insert, output, filtering, room, neighbourhood, price, nights, availability):
     """
     Start functions
     """
@@ -71,7 +69,7 @@ def main(insert, output, filtering, room, neighbourhood, nights, availability):
         print("Im going to filter")
         df = Filterdata(df).filter_neighbourhood(neighbourhood)
         df = Filterdata(df).filter_type(room)
-        df = Filterdata(df).filter_higher_mean()
+        df = Filterdata(df).filter_price(price)
         df = Filterdata(df).filter_min_nights(nights)
         df = Filterdata(df).filter_availability(availability)
 
