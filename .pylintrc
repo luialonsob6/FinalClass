@@ -5,4 +5,4 @@ ignore=
     README.md,
     requirements.txt,
     Makefile,
-    python-app.yml
+    .github/workflows/python-app.yml
