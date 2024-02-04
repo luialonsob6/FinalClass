@@ -48,13 +48,13 @@ class Filterdata:
 
 @click.command(short_help="parser to import dataset")
 @click.option("-i", "--insert", required=True, help="Path to my Input Dataset")
-@click.option("-o", "--output", required=True, help="Where to store the filtered dataset")
+@click.option("-o", "--output",  help="Where to store the filtered dataset")
 @click.option("-f", "--filtering", is_flag=True, help="Set a filtering or not")
-@click.option("-n", "--neighbourhood", required=True, help="Neighbour filter")
-@click.option("-p", "--price", required=True, help="Price filter")
-@click.option("-r", "--room", required=True, help="Room type to filter")
-@click.option("-ni", "--nights", required=True, help="Minimum nights")
-@click.option("-a", "--availability", required=True, help="Available filter")
+@click.option("-n", "--neighbourhood", help="Neighbour filter")
+@click.option("-p", "--price", help="Price filter")
+@click.option("-r", "--room", help="Room type to filter")
+@click.option("-ni", "--nights", help="Minimum nights")
+@click.option("-a", "--availability", help="Available filter")
 def main(insert, output, filtering, room, neighbourhood, price, nights, availability):
     """
     Start functions
@@ -79,7 +79,7 @@ def main(insert, output, filtering, room, neighbourhood, price, nights, availabi
     if not os.path.exists(output):
         os.makedirs(output)
 
-    df.to_csv(f"{output}/filtered_df.csv", index=None)
+    df.to_csv("outputs/filtered_df.csv", index=None)
 
 
 if __name__ == "__main__":

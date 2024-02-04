@@ -66,12 +66,15 @@ def load_dataset(filename):
 
 @click.command(short_help="parser to import dataset")
 @click.option("-i", "--insert", required=True, help="File to import")
-@click.option("-o", "--output", required=True, help="File to import")
+@click.option("-o", "--output", help="File to import")
 def main(insert, output):
     """
     Main Function
     """
-    df = load_dataset(insert)
+    dataset_dir = 'dataset' 
+    file_path = os.path.join(dataset_dir, insert)
+
+    df = load_dataset(file_path)
     print(df.shape)
 
     df = Cleaningclass(df).cleaning_columns()
@@ -84,8 +87,8 @@ def main(insert, output):
     if not os.path.exists(output):
         os.makedirs(output)
 
-    df.to_csv(f"{output}/cleaned_df.csv", index=None)
+    df.to_csv(f"dataset/cleaned_df.csv", index=None)
 
 
 if __name__ == "__main__":
-    unittest.main()
+    main()
