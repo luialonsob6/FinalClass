@@ -19,7 +19,7 @@ class Cleaningclass:
         """
         Borrar duplicados
         """
-        self.df.drop_duplicates()
+        self.df = self.df.drop_duplicates()
         return self.df
 
     def count_null(self, column):
@@ -34,7 +34,7 @@ class Cleaningclass:
 
     def erase_columns(self, column):
         """
-        Borrar aquellas columnas que tengan mas de 1000 valores nulos
+        Borrar aquellas columnas que tengan mas de un 30% de valores nulos
         """
         count = self.count_null(column)
         if count > (len(self.df) * 0.3):
@@ -65,14 +65,14 @@ def load_dataset(filename):
 
 
 @click.command(short_help="parser to import dataset")
-@click.option("-i", "--insert", required=True, help="File to import")
+@click.option("-i", "--input_file", required=True, help="File to import")
 @click.option("-o", "--output", help="File to import")
-def main(insert, output):
+def main(input_file, output):
     """
     Main Function
     """
-    dataset_dir = 'dataset' 
-    file_path = os.path.join(dataset_dir, insert)
+    dataset_dir = "dataset"
+    file_path = os.path.join(dataset_dir, input_file)
 
     df = load_dataset(file_path)
     print(df.shape)
@@ -84,11 +84,16 @@ def main(insert, output):
     print(df.info())
     print(df.shape)
 
-    if not os.path.exists(output):
-        os.makedirs(output)
+    if output:
+        output_path = os.path.join("dataset", output)
+        if not os.path.exists(output_path):
+            os.makedirs(output_path)
+        output_file = os.path.join(output_path, "cleaned_df.csv")
+    else:
+        output_file = "dataset/cleaned_df.csv"
 
-    df.to_csv(f"dataset/cleaned_df.csv", index=None)
+    df.to_csv(output_file, index= None)
 
 
 if __name__ == "__main__":
-    main()
+    unittest.main()

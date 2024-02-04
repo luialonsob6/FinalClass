@@ -48,7 +48,7 @@ class Filterdata:
 
 @click.command(short_help="parser to import dataset")
 @click.option("-i", "--insert", required=True, help="Path to my Input Dataset")
-@click.option("-o", "--output",  help="Where to store the filtered dataset")
+@click.option("-o", "--output", help="Where to store the filtered dataset")
 @click.option("-f", "--filtering", is_flag=True, help="Set a filtering or not")
 @click.option("-n", "--neighbourhood", help="Neighbour filter")
 @click.option("-p", "--price", help="Price filter")
